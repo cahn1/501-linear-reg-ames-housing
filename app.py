@@ -1,5 +1,6 @@
 import dash
-from dash import dcc, html
+from dash import html
+from dash import dcc
 from dash.dependencies import Input, Output, State
 
 
@@ -10,17 +11,22 @@ tabtitle = 'Ames Housing'
 sourceurl = 'http://jse.amstat.org/v19n3/decock.pdf'
 githublink = 'https://github.com/cahn1/501-linear-reg-ames-housing/tree/update1'
 
-
 # app server config
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 server = app.server
 app.title = tabtitle
 
-# app component layout
-app.layout = html.Div(
-    children=[
-        html.H1(myheading1),
+app.css.config.serve_locally = True
+app.scripts.config.serve_locally = True
+
+app.layout = html.Div([
+    html.H1('Linear regression analysis', style={
+        'textAlign': 'center', 'margin': '48px 0', 'fontFamily': 'system-ui'}),
+    dcc.Tabs(id="tabs", children=[
+        dcc.Tab(label='Tab one',
+                    children=[
+        html.H3(myheading1),
         html.Div([
             html.Img(src=app.get_asset_url(image1), style={'width': '30%', 'height': 'auto'}, className='four columns'),
             html.Div([
@@ -28,26 +34,64 @@ app.layout = html.Div(
                 html.Div(
                     children=[
                         html.Div('Year Built:', style={
-                            'display':'inline-block'}),
+                            'display':'inline-block', 'padding': 5, 'flex': 1}),
                         dcc.Input(id='YearBuilt', value=2010, type='number',
                                   min=2006, max=2010, step=1, style={
-                                'display': 'inline-block', 'height': 25}),
+                                'display': 'inline-block', 'height': 26,}),
                     ], style={'width': '49%', 'display': 'inline-block'}),
-                html.Div('Bathrooms:', style={
-                    'display':'inline-block'}),
-                dcc.Input(id='Bathrooms', value=2, type='number', min=1, max=5, step=1),
-                html.Div('Bedrooms:'),
-                dcc.Input(id='BedroomAbvGr', value=4, type='number', min=1, max=5, step=1),
-                html.Div('Total Square Feet:'),
-                dcc.Input(id='TotalSF', value=2000, type='number', min=100, max=5000, step=1),
-                html.Div('Single Family Home:'),
-                dcc.Input(id='SingleFam', value=0, type='number', min=0, max=1, step=1),
-                html.Div('Large Neighborhood:'),
-                dcc.Input(id='LargeNeighborhood', value=0, type='number', min=0, max=1, step=1),
-                html.Div('Car Garage:'),
-                dcc.Input(id='GarageCars', value=0, type='number', min=0, max=4, step=1),
-                html.Div('When Remodeled (Years ago):'),
-                dcc.Input(id='RecentYearModAdd', value=0, type='number', min=10, max=70, step=5),
+                html.Br(),html.Br(),
+                html.Div(
+                    children=[
+                        html.Div('Bathrooms:', style={
+                            'display':'inline-block'}),
+                        # dcc.Input(id='Bathrooms', value=2, type='number',
+                        #           min=1, max=5, step=1, style={
+                        #         'display': 'inline-block', 'height': 26}),
+                        dcc.Slider(id='Bathrooms', min=1, max=5, 
+                                   marks={i: f' {i}' if i == 1 else str(i) for i in range(1, 6)}, value=2,),
+                        
+                        html.Div('Bedrooms:', style={'display':'inline-block'}),
+                        # dcc.Input(id='BedroomAbvGr1', value=4, type='number', min=1, max=5, step=1, style={
+                        #         'display': 'inline-block', 'height': 26}),
+                        dcc.Slider(id='BedroomAbvGr', min=1, max=5, 
+                                   marks={i: f'{i}' if i == 1 else str(i) for i in range(1, 6)}, value=2,),
+                    ], style={'width': '70%', 'display': 'inline-block'}),
+                #html.Div('Bedrooms:', style={'display':'inline-block'}),
+                html.Br(),html.Br(),
+                html.Div(
+                    children=[
+                        html.Div('Total Square Feet:', style={
+                            'display':'inline-block', 'padding': 5, 'flex': 1}),
+                        dcc.Input(id='TotalSF', value=2000, type='number',
+                                  min=100, max=5000, step=1, style={
+                                'display': 'inline-block', 'height': 26}),
+                    ], style={'width': '49%', 'display': 'inline-block'}),
+                html.Br(),html.Br(),
+                dcc.Checklist(id='SingleFam', options=[{'label': 'Single Family Home', 'value': 1}], value=[],),
+                dcc.Checklist(id='LargeNeighborhood', options=[{'label': 'Large Neighborhood', 'value': 1}], value=[],),
+                html.Br(),html.Br(),
+                html.Div(
+                    children=[
+                        html.Div('Car Garage:', style={
+                            'display':'inline-block'}),
+                        # dcc.Input(id='Bathrooms', value=2, type='number',
+                        #           min=1, max=5, step=1, style={
+                        #         'display': 'inline-block', 'height': 26}),
+                        dcc.Slider(id='GarageCars', min=0, max=4, 
+                                   marks={i: f' {i}' if i == 1 else str(i) for i in range(0, 5)}, value=0,),
+                        
+                        html.Div('When Remodeled (Years ago):', style={
+                            'display':'inline-block', 'padding': 5, 'flex': 1}),
+                        dcc.Input(id='RecentYearModAdd', value=0, type='number',
+                                  min=0, max=70, step=1, style={
+                                'display': 'inline-block', 'height': 26}),
+                    ], style={'width': '70%', 'display': 'inline-block'}),
+                # html.Div('Car Garage:'),
+                # dcc.Input(id='GarageCars', value=0, type='number', min=0, max=4, step=1),
+                # html.Div('Total Square Feet:'),
+                # dcc.Input(id='TotalSF', value=2000, type='number', min=100, max=5000, step=1),
+                # html.Div('When Remodeled (Years ago):'),
+                # dcc.Input(id='RecentYearModAdd', value=0, type='number', min=0, max=70, step=1),
             ], className='four columns'),
             html.Div([
                 html.Button(
@@ -74,8 +118,62 @@ app.layout = html.Div(
         html.A('Code on Github', href=githublink),
         html.Br(),
         html.A("Data Source", href=sourceurl),
-    ]
-)
+    ]),
+        dcc.Tab(label='Tab two', children=[
+            html.Div([
+                html.H1("This is the content in tab 2"),
+                html.P("A graph here would be nice!"),
+                dcc.Graph(
+                    id='example-graph1',
+                    figure={
+                        'data': [
+                            {'x': [1, 2, 3], 'y': [5, 2, 3],
+                             'type': 'barpolar', 'name': 'SF'},
+                            {'x': [1, 2, 3], 'y': [6, 8, 1],
+                             'type': 'barpolar', 'name': u'Montréal'},
+                        ],
+                        'layout': {
+                            'title': '2 Dash Data Visualization'
+                        }
+                    }
+                )
+            ])
+        ]),
+        dcc.Tab(label='Tab three', children=[
+            html.Div([
+                html.H1("This is the content in tab 3"),
+                dcc.Graph(
+                    id='example-graph2',
+                    figure={
+                        'data': [
+                            {'x': [1, 2, 3], 'y': [5, 2, 3],
+                             'type': 'scatter', 'name': 'SF'},
+                            {'x': [1, 2, 3], 'y': [6, 8, 1],
+                             'type': 'scatter', 'name': u'Montréal'},
+                        ],
+                        'layout': {
+                            'title': '2 Dash Data Visualization'
+                        }
+                    }
+                )
+            ])
+        ]),
+    ],
+    style={
+        'fontFamily': 'system-ui'
+    },
+    content_style={
+        'borderLeft': '1px solid #d6d6d6',
+        'borderRight': '1px solid #d6d6d6',
+        'borderBottom': '1px solid #d6d6d6',
+        'padding': '44px'
+    },
+    parent_style={
+        'maxWidth': '1400px',
+        'margin': '0 auto'
+    })
+])
+
 
 # callback
 @app.callback(
@@ -86,8 +184,9 @@ app.layout = html.Div(
     State(component_id='BedroomAbvGr', component_property='value'),
     State(component_id='TotalSF', component_property='value'),
     State(component_id='SingleFam', component_property='value'),
-    State(component_id='LargeNeighborhood', component_property='value')
-
+    State(component_id='LargeNeighborhood', component_property='value'),
+    State(component_id='GarageCars', component_property='value'),
+    State(component_id='RecentYearModAdd', component_property='value')
 )
 def ames_lr_function(
     clicks, YearBuilt, Bathrooms, BedroomAbvGr, TotalSF, SingleFam,
@@ -95,18 +194,18 @@ def ames_lr_function(
     if clicks == 0:
         return "Please fill features.."
     else:
+        print(f'SingleFam: {SingleFam}')
         y = [-662787.386 + 354.0397*YearBuilt + 
              8084.212*Bathrooms + 
              -4936.6207*BedroomAbvGr + 
              42.3296*TotalSF+ 
-             22095.5417*SingleFam+ 
-             -7951.5585*LargeNeighborhood + 
+             22095.5417*(0 if SingleFam == [] else 1) +
+             -7951.5585*(0 if LargeNeighborhood == [] else 1) +
              19530.1413*GarageCars + 
              -506.7658*RecentYearModAdd]
         formatted_y = "${:,.2f}".format(y[0])
         return formatted_y
 
 
-# Initiate app
 if __name__ == '__main__':
     app.run_server(debug=True)
