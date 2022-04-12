@@ -8,7 +8,7 @@ myheading1 = 'Predicting Home Sale Prices in Ames, Iowa'
 image1 = 'ames_welcome.jpeg'
 tabtitle = 'Ames Housing'
 sourceurl = 'http://jse.amstat.org/v19n3/decock.pdf'
-githublink = 'https://github.com/plotly-dash-apps/501-linear-reg-ames-housing'
+githublink = 'https://github.com/cahn1/501-linear-reg-ames-housing/tree/update1'
 
 
 # app server config
@@ -25,9 +25,16 @@ app.layout = html.Div(
             html.Img(src=app.get_asset_url(image1), style={'width': '30%', 'height': 'auto'}, className='four columns'),
             html.Div([
                 html.H3('Features of Home:'),
-                html.Div('Year Built:'),
-                dcc.Input(id='YearBuilt', value=2010, type='number', min=2006, max=2010, step=1),
-                html.Div('Bathrooms:'),
+                html.Div(
+                    children=[
+                        html.Div('Year Built:', style={
+                            'display':'inline-block'}),
+                        dcc.Input(id='YearBuilt', value=2010, type='number',
+                                  min=2006, max=2010, step=1, style={
+                                'display': 'inline-block', 'height': 25}),
+                    ], style={'width': '49%', 'display': 'inline-block'}),
+                html.Div('Bathrooms:', style={
+                    'display':'inline-block'}),
                 dcc.Input(id='Bathrooms', value=2, type='number', min=1, max=5, step=1),
                 html.Div('Bedrooms:'),
                 dcc.Input(id='BedroomAbvGr', value=4, type='number', min=1, max=5, step=1),
@@ -37,7 +44,11 @@ app.layout = html.Div(
                 dcc.Input(id='SingleFam', value=0, type='number', min=0, max=1, step=1),
                 html.Div('Large Neighborhood:'),
                 dcc.Input(id='LargeNeighborhood', value=0, type='number', min=0, max=1, step=1),
-                ], className='four columns'),
+                html.Div('Car Garage:'),
+                dcc.Input(id='GarageCars', value=0, type='number', min=0, max=4, step=1),
+                html.Div('When Remodeled (Years ago):'),
+                dcc.Input(id='RecentYearModAdd', value=0, type='number', min=10, max=70, step=5),
+            ], className='four columns'),
             html.Div([
                 html.Button(
                     children='Submit', id='submit-val', n_clicks=0,
@@ -56,7 +67,7 @@ app.layout = html.Div(
         html.Br(),
         html.Br(),
         html.H4('Regression Equation:'),
-        html.Div('Predicted Price = (- $1,360.5K Baseline) + ($0.7K * Year Built) + ($12.7K * Bathrooms) + (- $7.7K * Bedrooms) + ($0.049K * Total Square Feet) + ($ 25.2K * Single Family Home) + (- $6.6 K * Large Neighborhood)'),
+        html.Div('Predicted Price = (- $662.7K Baseline) + ($0.35K * Year Built) + ($8.1K * Bathrooms) + (- $4.9K * Bedrooms) + ($0.042K * Total Square Feet) + ($ 22.1K * Single Family Home) + (- $7.9K * Large Neighborhood) + (19.5K * Car Garage) + (- $0.5K * When Remodeled (Years ago)'),
         html.Br(),
         html.A('Google Spreadsheet', href='https://docs.google.com/spreadsheets/d/1q2ustRvY-GcmPO5NYudvsBEGNs5Na5p_8LMeS4oM35U/edit?usp=sharing'),
         html.Br(),
@@ -65,7 +76,6 @@ app.layout = html.Div(
         html.A("Data Source", href=sourceurl),
     ]
 )
-
 
 # callback
 @app.callback(
@@ -79,12 +89,20 @@ app.layout = html.Div(
     State(component_id='LargeNeighborhood', component_property='value')
 
 )
-def ames_lr_function(clicks, YearBuilt, Bathrooms, BedroomAbvGr, TotalSF,
-                     SingleFam,LargeNeighborhood):
-    if clicks==0:
-        return "waiting for inputs"
+def ames_lr_function(
+    clicks, YearBuilt, Bathrooms, BedroomAbvGr, TotalSF, SingleFam,
+    LargeNeighborhood, GarageCars, RecentYearModAdd):
+    if clicks == 0:
+        return "Please fill features.."
     else:
-        y = [-1360501.3809 + 704.4287*YearBuilt + 12738.4775*Bathrooms + -7783.1712*BedroomAbvGr + 49.824*TotalSF+ 25282.091*SingleFam+ -6637.2636*LargeNeighborhood]
+        y = [-662787.386 + 354.0397*YearBuilt + 
+             8084.212*Bathrooms + 
+             -4936.6207*BedroomAbvGr + 
+             42.3296*TotalSF+ 
+             22095.5417*SingleFam+ 
+             -7951.5585*LargeNeighborhood + 
+             19530.1413*GarageCars + 
+             -506.7658*RecentYearModAdd]
         formatted_y = "${:,.2f}".format(y[0])
         return formatted_y
 
