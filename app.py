@@ -124,77 +124,66 @@ app.layout = html.Div([
         dcc.Tab(label='Cancer prediction',
             children=[
                 html.Div([
-                    html.Img(
-                        src=app.get_asset_url(image2),
-                        style={'width': '30%', 'height': 'auto'},
-                        className='four columns'),
-                    html.Img(
-                        src=app.get_asset_url(image3),
-                        style={'width': '30%', 'height': 'auto'},
-                        className='four columns'),
+                    html.Div(children=[
+                        html.Img(
+                            src=app.get_asset_url(image2),
+                            style={'width': '40%', 'height': 'auto'},
+                            className='three columns'),
+                        html.Img(
+                            src=app.get_asset_url(image3),
+                            style={'width': '30%', 'height': 'auto'},
+                            className='three columns'),
+                    ]),
                     html.Div([
                         html.H3('Features:'),
                         html.Div(
                             children=[
-                                html.Div('PctBachDeg25_Over:', style={'display':'inline-block'}),
-                                dcc.Slider(id='PctBachDeg25_Over', min=1, max=5,
-                                           marks={i: f' {i}' if i == 1 else str(i) for i in range(1, 6)}, value=2,),
+                                html.Div('Percent of county residents ages 25 and over highest education attained:', style={'display':'inline-block'}),
+                                dcc.Slider(id='PctBachDeg25_Over', min=2, max=43, step=0.1, value=2.5, tooltip={"placement": "bottom", "always_visible": True}),
 
-                                html.Div('incidenceRate:', style={'display':'inline-block'}),
-                                dcc.Slider(id='incidenceRate', min=1, max=5,
-                                           marks={i: f'{i}' if i == 1 else str(i) for i in range(1, 6)}, value=2,),
+                                html.Div('Mean per capita (100,000) cancer diagoses:', style={'display':'inline-block'}),
+                                dcc.Slider(id='incidenceRate', min=200, max=1210, step=1, value=450, tooltip={"placement": "bottom", "always_visible": True}),
+
+                                html.Div('Percent of populace in poverty(%):', style={'display':'inline-block'}),
+                                dcc.Slider(id='povertyPercent', min=3, max=48, step=0.1, value=17, tooltip={"placement": "bottom", "always_visible": True}),
+
+                                html.Div('Median Income($):', style={'display':'inline-block'}),
+                                dcc.Slider(id='medIncome', min=22000, max=130000, step=1000, value=47063, tooltip={"placement":"bottom", "always_visible": True}),
+
+                                html.Div('Percent of county residents ages 18-24 highest education attained: high school diploma:', style={'display':'inline-block'}),
+                                dcc.Slider(id='PctHS18_24', min=0, max=73, step=0.1, value=35, tooltip={"placement": "bottom", "always_visible": True}),
+
+                                html.Div('Percent of county residents ages 25 and over highest education attained: high school diploma:', style={'display':'inline-block'}),
+                                dcc.Slider(id='PctHS25_Over', min=7, max=55, step=0.1, value=34, tooltip={"placement": "bottom", "always_visible": True}),
+
+                                html.Div('Percent of county residents ages 18-24 highest education attained: bachelor’s degree:', style={'display':'inline-block'}),
+                                dcc.Slider(id='PctBachDeg18_24', min=0, max=52, step=0.1, value=6.1, tooltip={ "placement": "bottom", "always_visible": True}),
+
                                 html.Div('PctPublicCoverageAlone:', style={'display':'inline-block'}),
-                                dcc.Slider(id='PctPublicCoverageAlone', min=1, max=5,
-                                           marks={i: f'{i}' if i == 1 else str(i) for i in range(1, 6)}, value=2,),
-                                html.Div('povertyPercent:', style={'display':'inline-block'}),
-                                dcc.Slider(id='povertyPercent', min=1, max=5,
-                                           marks={i: f'{i}' if i == 1 else str(i) for i in range(1, 6)}, value=2,),
-                                html.Div('medIncome:', style={'display':'inline-block'}),
-                                dcc.Slider(id='medIncome', min=1, max=5,
-                                           marks={i: f'{i}' if i == 1 else str(i) for i in range(1, 6)}, value=2,),
-                                html.Div('PctHS25_Over:', style={'display':'inline-block'}),
-                                dcc.Slider(id='PctHS25_Over', min=1, max=5,
-                                           marks={i: f'{i}' if i == 1 else str(i) for i in range(1, 6)}, value=2,),
-                                html.Div('PctPublicCoverage:', style={'display':'inline-block'}),
-                                dcc.Slider(id='PctPublicCoverage', min=1, max=5,
-                                           marks={i: f'{i}' if i == 1 else str(i) for i in range(1, 6)}, value=2,),
-                                html.Div('PctPrivateCoverage:', style={'display':'inline-block'}),
-                                dcc.Slider(id='PctPrivateCoverage', min=1, max=5,
-                                           marks={i: f'{i}' if i == 1 else str(i) for i in range(1, 6)}, value=2,),
-                                html.Div('PctUnemployed16_Over:', style={'display':'inline-block'}),
-                                dcc.Slider(id='PctUnemployed16_Over', min=1, max=5,
-                                           marks={i: f'{i}' if i == 1 else str(i) for i in range(1, 6)}, value=2,),
-                                html.Div('PctMarriedHouseholds:', style={'display':'inline-block'}),
-                                dcc.Slider(id='PctMarriedHouseholds', min=1, max=5,
-                                           marks={i: f'{i}' if i == 1 else str(i) for i in range(1, 6)}, value=2,),
-                                html.Div('PctBachDeg18_24:', style={'display':'inline-block'}),
-                                dcc.Slider(id='PctBachDeg18_24', min=1, max=5,
-                                           marks={i: f'{i}' if i == 1 else str(i) for i in range(1, 6)}, value=2,),
-                                html.Div('PctEmpPrivCoverage:', style={'display':'inline-block'}),
-                                dcc.Slider(id='PctEmpPrivCoverage', min=1, max=5,
-                                           marks={i: f'{i}' if i == 1 else str(i) for i in range(1, 6)}, value=2,),
-                                html.Div('PercentMarried:', style={'display':'inline-block'}),
-                                dcc.Slider(id='PercentMarried', min=1, max=5,
-                                           marks={i: f'{i}' if i == 1 else str(i) for i in range(1, 6)}, value=2,),
-                                html.Div('PctHS18_24:', style={'display':'inline-block'}),
-                                dcc.Slider(id='PctHS18_24', min=1, max=5,
-                                           marks={i: f'{i}' if i == 1 else str(i) for i in range(1, 6)}, value=2,),
-                                html.Div('PctBlack:', style={'display':'inline-block'}),
-                                dcc.Slider(id='PctBlack', min=1, max=5,
-                                           marks={i: f'{i}' if i == 1 else str(i) for i in range(1, 6)}, value=2,),
-                            ], style={'width': '70%', 'display': 'inline-block'}),
-                        # html.Br(),html.Br(),
-                        # html.Div(
-                        #     children=[
-                        #         html.Div('Car Garage:', style={
-                        #             'display':'inline-block'}),
-                        #         # dcc.Input(id='Bathrooms', value=2, type='number',
-                        #         #           min=1, max=5, step=1, style={
-                        #         #         'display': 'inline-block', 'height': 26}),
-                        #         dcc.Slider(id='GarageCars', min=0, max=4,
-                        #                    marks={i: f' {i}' if i == 1 else str(i) for i in range(0, 5)}, value=0,),
-                        #     ], style={'width': '70%', 'display': 'inline-block'}),
-                    ], className='four columns'),
+                                dcc.Slider(id='PctPublicCoverageAlone', min=2, max=47, step=19, value=2.5, tooltip={"placement": "bottom", "always_visible": True}),
+
+                                html.Div('Percent of county residents with government-provided health coverage:', style={'display':'inline-block'}),
+                                dcc.Slider(id='PctPublicCoverage', min=11, max=66, step=0.1, value=26, tooltip={ "placement": "bottom", "always_visible": True}),
+
+                                html.Div('Percent of county residents with private health coverage:', style={'display':'inline-block'}),
+                                dcc.Slider(id='PctPrivateCoverage', min=22, max=93, step=0.1, value=64.3, tooltip={ "placement": "bottom", "always_visible": True}),
+
+                                html.Div('Percent of county residents with employee-provided private health coverage:', style={'display':'inline-block'}),
+                                dcc.Slider(id='PctEmpPrivCoverage', min=13, max=71, step=0.1, value=48, tooltip={ "placement": "bottom", "always_visible": True}),
+
+                                html.Div('Percent of county residents ages 16 and over unemployed:', style={'display':'inline-block'}),
+                                dcc.Slider(id='PctUnemployed16_Over', min=0.5, max=30, step=0.1, value=7.1, tooltip={ "placement": "bottom", "always_visible": True}),
+
+                                html.Div('Percent of married households:', style={'display':'inline-block'}),
+                                dcc.Slider(id='PctMarriedHouseholds', min=20, max=80, step=0.1, value=51, tooltip={"placement": "bottom", "always_visible": True}),
+
+                                html.Div('Percent of county residents who are married:', style={'display':'inline-block'}),
+                                dcc.Slider(id='PercentMarried', min=20, max=80, step=0.1, value=70, tooltip={ "placement": "bottom", "always_visible": True}),
+
+                                html.Div('Percent of county residents who identify as Black:', style={'display':'inline-block'}),
+                                dcc.Slider(id='PctBlack', min=0, max=86, step=0.1, value=5, tooltip={"placement": "bottom", "always_visible": True}),                            ], style={'width': '70%', 'display': 'inline-block'}),
+                    ], className='seven columns'),
+                    html.Br(), html.Br(), html.Br(),
                     html.Div([
                         html.Button(
                             children='Submit', id='submit-val1', n_clicks=0,
@@ -207,11 +196,9 @@ app.layout = html.Div([
                         ),
                         html.H3('Predicted Cancer Death Rate:'),
                         html.Div(id='cancer_output')
-                    ], className='four columns')
+                    ], className='three columns')
                 ], className='twelve columns',),
-                html.Br(),
-                html.Br(),
-                html.Br(),
+                html.Br(), html.Br(), html.Br(),
                 html.H4('Regression Equation:'),
                 html.Div('Predicted Death Rate = 102.7807 + (-1.0272*PctBachDeg25_Over) + (0.207*incidenceRate) + (-0.0655*PctPublicCoverageAlone) + (0.6177*povertyPercent) + (0.0001*medIncome) + (0.6255*PctHS25_Over) + (-0.0824*PctPublicCoverage) + (-0.6517*PctPrivateCoverage) + (0.3433*PctUnemployed16_Over) + (-0.9779*PctMarriedHouseholds) + (-0.1667*PctBachDeg18_24) + (0.4668*PctEmpPrivCoverage) + (0.5182*PercentMarried) + (0.277*PctHS18_24) + (-0.0209*PctBlack)'),
                 html.Br(),
@@ -310,7 +297,7 @@ def cancer_lr_function(
              0.5182*PercentMarried +
              0.277*PctHS18_24 +
              -0.0209*PctBlack]
-        formatted_y = "${:,.2f}".format(y[0])
+        formatted_y = "{:,.2f}%".format(y[0])
         return formatted_y
 
 if __name__ == '__main__':
