@@ -87,7 +87,8 @@ app.layout = html.Div([
                             dcc.Input(id='RecentYearModAdd', value=0, type='number',
                                     min=0, max=70, step=1, style={
                                     'display': 'inline-block', 'height': 26}),
-                        ], style={'width': '70%', 'display': 'inline-block'}),
+                        ], style={'width': '70%', 'display': 'inline-block',
+                                  'color': 'purple'}),
                     # html.Div('Car Garage:'),
                     # dcc.Input(id='GarageCars', value=0, type='number', min=0, max=4, step=1),
                     # html.Div('Total Square Feet:'),
